@@ -1,0 +1,74 @@
+xv6...
+console init
+cpu0: starting 0
+sb: size 1000 nblocks 941 ninodes 200 nlog 30 logstart 2 inodestart 32 bmap start 58
+PGZERO: 0x0
+PGZERO: 0x2000
+init: starting test1
+PGTRAP: err: 0x7, va = 0x2fcc
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2fcc
+!TESTSTART!
+PGTRAP: err: 0x7, va = 0x2fc4
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2fc4
+PGZERO: 0x0
+PGZERO: 0x2000
+3: I am ''
+PGTRAP: err: 0x7, va = 0x2f6c
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2f60
+4: I am '0'
+PGTRAP: err: 0x7, va = 0x2f0c
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2f00
+5: I am '00'
+PGTRAP: err: 0x7, va = 0x2eac
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2ea0
+6: I am '000'
+PGTRAP: err: 0x7, va = 0x2eac
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2ea0
+7: I am '001'
+PGTRAP: err: 0x7, va = 0x2f0c
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2f00
+8: I am '01'
+PGTRAP: err: 0x7, va = 0x2eac
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2ea0
+9: I am '010'
+PGTRAP: err: 0x7, va = 0x2eac
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2ea0
+10: I am '011'
+PGTRAP: err: 0x7, va = 0x2f6c
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2f60
+11: I am '1'
+PGTRAP: err: 0x7, va = 0x2f0c
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2f00
+12: I am '10'
+PGTRAP: err: 0x7, va = 0x2eac
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2ea0
+13: I am '100'
+PGTRAP: err: 0x7, va = 0x2eac
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2ea0
+14: I am '101'
+PGTRAP: err: 0x7, va = 0x2f0c
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2f00
+15: I am '11'
+PGTRAP: err: 0x7, va = 0x2eac
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2ea0
+16: I am '110'
+PGTRAP: err: 0x7, va = 0x2eac
+PGCOPY: 0x2000
+PGTRAP: err: 0x7, va = 0x2ea0
+17: I am '111'
+!TESTEND!

@@ -1,0 +1,61 @@
+// init: The initial user-level program
+
+#include "types.h"
+#include "stat.h"
+#include "user.h"
+#include "fcntl.h"
+
+char *argv[] = { "sh", 0 };
+
+int glbl =0 ;
+
+
+int
+main(void)
+{
+//  int pid, wpid;
+
+  if(open("console", O_RDWR) < 0){
+    mknod("console", 1, 1);
+    open("console", O_RDWR);
+  }
+  dup(0);  // stdout
+  dup(0);  // stderr
+
+  for(;;){
+	
+	int rc = fork();
+	if(rc == -1) {
+		printf(2, "Fork Failed");
+		while(1);
+	}	
+	if(rc) {
+		printf(1, "Parent waiting\n");
+		wait();
+		glbl = 1;
+	} else {
+		printf(1, "Child Starting\n");
+		glbl = 2;
+		exit();
+	}
+	printf(1, "Done");
+	while(1);
+		  
+		  
+		  
+		  
+/*  printf(1, "init: starting sh\n");
+    pid = fork();
+    if(pid < 0){
+      printf(1, "init: fork failed\n");
+      exit();
+    }
+    if(pid == 0){
+      exec("sh", argv);
+      printf(1, "init: exec sh failed\n");
+      exit();
+    }
+    while((wpid=wait()) >= 0 && wpid != pid)
+      printf(1, "zombie!\n");
+ */ }
+}

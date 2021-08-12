@@ -1,0 +1,6 @@
+*~
+.gdbinit
+.idea
+build/*
+!build/run.sh
+*.c.*

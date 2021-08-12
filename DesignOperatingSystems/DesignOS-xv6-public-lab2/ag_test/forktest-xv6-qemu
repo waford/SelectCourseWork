@@ -1,0 +1,98 @@
+#!/bin/bash
+
+CPUS="1"
+MEMORY="512"
+GDB=""
+#GRAPHIC="-display none"
+GRAPHIC="-nographic"
+SERIAL=""
+VERBOSE=false
+FS="user/fs.img"
+KERN="xv6.img"
+
+function print_help() {
+  print "usage $0 [-c|--num-cpus=NUM_CPUS] [-g|--gdb] [-x|-x-server] [-v|--verbose] [-m|--memory=PHYS_MEMORY]"
+  print "    -h  -\? --help  -- Display this message"
+  print "    -c  --num-cpus  -- The number of CPUS to give to xv6, default is ${CPUS}"
+  print "    -g  --gdb       -- Enable gdb connections"
+  print "    -s  --serial    -- Serial file redirection"
+  #print "    -x  --x-server  -- Turn on the x server display"
+  print "    -v  --verbose   -- More verbose printing from this script"
+  print "    -m  --memory    -- Set the amount of memory to give to xv6 (default is ${MEMORY})"
+  print "    --fs=<FS.img>   -- Set the loaded user-space filesystem (default is ${FS})"
+  print "    --kern=<kernel.img>   -- Set the loaded kernel image (default is ${KERN})"
+}
+
+OPTIONS="h?c:gxvm:s:"
+LONGOPTS="help,num-cpus:,gdb,x-server,verbose,memory:,fs:,kern:,serial:"
+
+! PARSED=$(getopt --options=${OPTIONS} --longoptions=${LONGOPTS} --name "$0" -- "$@")
+
+if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
+  print_help
+  exit 1
+fi
+
+eval set -- "${PARSED}"
+
+
+
+while true; do
+  case "$1" in
+    -h|-\?|--help)
+      print_help
+      exit 0
+      ;;
+    -v|--verbose)
+      VERBOSE=true
+      shift
+      ;;
+    -c|--num-cpus)
+      CPUS="$2"
+      shift 2
+      ;;
+    -m|--memory)
+      MEMORY="$2"
+      shift 2
+      ;;
+    -s|--serial)
+      SERIAL="-serial file:$2"
+      if [[ ${GRAPHIC} -eq "-nographic" ]]; then
+        GRAPHIC="-display none"
+      fi
+      shift 2
+      ;;
+    --fs)
+      FS="$2"
+      shift 2
+      ;;
+    --kern)
+      KERN="$2"
+      shift 2
+      ;;
+    -g|--gdb)
+      GDB="-S -gdb tcp::26000"
+      shift
+      ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      echo "Unrecognized option $1"
+      print_help
+      exit 1
+      ;;
+  esac
+done
+
+
+
+SCRIPT="qemu-system-i386 ${GRAPHIC} ${SERIAL} -drive file=../ag_test/forktest_fs.img,index=1,media=disk,format=raw -drive file=${KERN},index=0,media=disk,format=raw -smp ${CPUS} -m ${MEMORY} ${GDB}"
+
+if [[ ${VERBOSE} ]]; then
+  echo "COMMAND: ${SCRIPT}"
+fi
+
+${SCRIPT}
+

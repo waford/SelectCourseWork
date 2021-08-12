@@ -1,0 +1,6 @@
+*~
+.gdbinit
+*.swp
+build/
+.idea
+

@@ -1,0 +1,72 @@
+#!/bin/bash
+
+CPUS="1"
+MEMORY="512"
+GDB=""
+GRAPHIC="-nographic"
+VERBOSE=false
+
+function print_help() {
+  print "usage $0 [-c|--num-cpus=NUM_CPUS] [-g|--gdb] [-x|-x-server] [-v|--verbose] [-m|--memory=PHYS_MEMORY]"
+  print "    -h  -\? --help  -- Display this message"
+  print "    -c  --num-cpus  -- The number of CPUS to give to xv6, default is ${CPUS}"
+  print "    -g  --gdb       -- Enable gdb connections"
+  print "    -x  --x-server  -- Turn on the x server display"
+  print "    -v  --verbose   -- More verbose printing from this script"
+  print "    -m  --memory    -- Set the amount of memory to give to xv6 (default is ${MEMORY})"
+}
+
+OPTIONS="h?c:gxvm:"
+LONGOPTS="help,num-cpus:,gdb,x-server,verbose,memory:"
+
+! PARSED=$(getopt --options=${OPTIONS} --longoptions=${LONGOPTS} --name "$0" -- "$@")
+
+if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
+  print_help
+  exit 1
+fi
+
+eval set -- "${PARSED}"
+
+
+
+while true; do
+  case "$1" in
+    -h|-\?|--help)
+      print_help
+      exit 0
+      ;;
+    -v|--verbose)
+      VERBOSE=true
+      shift
+      ;;
+    -c|--num-cpus)
+      CPUS="$2"
+      shift 2
+      ;;
+    -g|--gdb)
+      GDB="-S -gdb tcp::26000"
+      shift
+      ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      echo "Unrecognized option $1"
+      print_help
+      exit 1
+      ;;
+  esac
+done
+
+
+
+SCRIPT="qemu-system-i386 ${GRAPHIC} -drive file=user/fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp ${CPUS} -m ${MEMORY} ${GDB}"
+
+if [[ ${VERBOSE} ]]; then
+  echo "COMMAND: ${SCRIPT}"
+fi
+
+${SCRIPT}
+
